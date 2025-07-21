@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package broker;
+option go_package = "./proto";
+
+service Broker {
+    rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse);
+    rpc Produce(ProduceRequest) returns (ProduceResponse);
+    rpc Consume(ConsumeRequest) returns (stream ConsumeResponse);
+}
+
+message CreateTopicRequest {
+    string topic = 1;
+    int32 partitions = 2;
+}
+
+message CreateTopicResponse {
+    bool success = 1;
+    string error = 2;
+}
+
+message ProduceRequest {
+    string topic = 1;
+    int32 partition = 2;
+    bytes payload = 3;
+}
+
+message ProduceResponse {
+    int32 partition = 1;
+    int64 offset = 2;
+    string error = 3;
+}
+
+message ConsumeRequest {
+    string topic = 1;
+    int32 partition = 2;
+    int64 offset = 3;
+}
+
+message ConsumeResponse {
+    int64 offset = 1;
+    bytes payload = 2;
+    string error = 3;
+}
