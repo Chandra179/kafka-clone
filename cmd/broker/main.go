@@ -13,6 +13,7 @@ import (
 	"syscall"
 
 	grpcServer "google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -38,7 +39,8 @@ func main() {
 	}
 
 	s := grpcServer.NewServer()
-	pb.RegisterBrokerServer(s, handler)
+	pb.RegisterBrokerServer(s, handler) //runtime reflection check
+	reflection.Register(s)
 
 	// Graceful shutdown
 	go func() {
